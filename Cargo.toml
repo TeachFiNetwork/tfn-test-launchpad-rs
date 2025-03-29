@@ -14,5 +14,11 @@ num-bigint = "0.4.2"
 [dependencies.multiversx-sc]
 version = "0.54.4"
 
+[dependencies.tfn-platform]
+path = "../tfn-platform-rs"
+
+[dependencies.tfn-launchpad]
+path = "../tfn-launchpad-rs"
+
 [dev-dependencies.multiversx-sc-scenario]
 version = "0.54.4"
