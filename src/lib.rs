@@ -28,7 +28,6 @@ pub trait TFNTestLaunchpadContract<ContractReader>:
     #[endpoint(newLaunchpad)]
     fn new_launchpad(
         &self,
-        kyc_enforced: bool,
         description: ManagedBuffer,
         token: TokenIdentifier,
         payment_token: TokenIdentifier,
@@ -54,7 +53,6 @@ pub trait TFNTestLaunchpadContract<ContractReader>:
         let launchpad = Launchpad{
             id: self.last_launchpad_id().get(),
             owner: caller,
-            kyc_enforced,
             description,
             token: token.clone(),
             amount: BigUint::zero(),
@@ -114,17 +112,6 @@ pub trait TFNTestLaunchpadContract<ContractReader>:
         }
     }
 
-    #[endpoint(whitelistUser)]
-    fn whitelist_user(&self, id: u64, user: ManagedAddress) {
-        require!(self.state().get() == State::Active, ERROR_NOT_ACTIVE);
-        require!(!self.launchpads(id).is_empty(), ERROR_LAUNCHPAD_NOT_FOUND);
-
-        let launchpad = self.launchpads(id).get();
-        require!(launchpad.owner == self.blockchain().get_caller(), ERROR_ONLY_LAUNCHPAD_OWNER);
-
-        self.whitelisted_users(id).insert(user);
-    }
-
     #[payable("*")]
     #[endpoint(buy)]
     fn buy(&self, id: u64) {
@@ -139,8 +126,6 @@ pub trait TFNTestLaunchpadContract<ContractReader>:
 
         let token_amount = &payment.amount * ONE / &launchpad.price;
         let caller = self.blockchain().get_caller();
-        require!(!launchpad.kyc_enforced || self.whitelisted_users(id).contains(&caller), ERROR_NOT_WHITELISTED);
-
         let old_bought_amount = self.user_participation(&caller, id).get();
         require!(
             &token_amount + &old_bought_amount >= launchpad.min_buy_amount,

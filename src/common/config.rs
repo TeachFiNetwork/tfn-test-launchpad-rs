@@ -24,7 +24,6 @@ pub enum Status {
 pub struct Launchpad<M: ManagedTypeApi> {
     pub id: u64,
     pub owner: ManagedAddress<M>,
-    pub kyc_enforced: bool,
     pub description: ManagedBuffer<M>,
     pub token: TokenIdentifier<M>, // should have 18 decimals. please check in front end
     pub amount: BigUint<M>,
@@ -44,7 +43,6 @@ pub struct Launchpad<M: ManagedTypeApi> {
 #[derive(ManagedVecItem, TopEncode, TopDecode, NestedEncode, NestedDecode, PartialEq, Eq, Clone, Debug)]
 pub struct LaunchpadView<M: ManagedTypeApi> {
     pub bought: BigUint<M>,
-    pub whitelisted: bool,
     pub launchpad: Launchpad<M>,
 }
 
@@ -125,7 +123,6 @@ pub trait ConfigModule {
             launchpad.status = launchpad.get_status(current_time);
             launchpads.push(LaunchpadView {
                 bought: self.user_participation(&address, i).get(),
-                whitelisted: self.whitelisted_users(i).contains(&address) || !launchpad.kyc_enforced,
                 launchpad,
             });
         }
@@ -235,9 +232,4 @@ pub trait ConfigModule {
     #[view(getUserParticipation)]
     #[storage_mapper("user_participation")]
     fn user_participation(&self, user: &ManagedAddress, id: u64) -> SingleValueMapper<BigUint>;
-
-    // kyc
-    #[view(getWhitelistedUsers)]
-    #[storage_mapper("whitelisted_users")]
-    fn whitelisted_users(&self, id: u64) -> UnorderedSetMapper<ManagedAddress>;
 }
