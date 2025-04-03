@@ -37,9 +37,10 @@ pub trait TFNTestLaunchpadContract<ContractReader>:
         start_time: u64,
         end_time: u64
     ) -> u64 {
+        require!(self.state().get() == State::Active, ERROR_NOT_ACTIVE);
+
         let caller = self.blockchain().get_caller();
         self.check_whitelisted(&caller);
-        require!(self.state().get() == State::Active, ERROR_NOT_ACTIVE);
 
         require!(price > 0, ERROR_ZERO_PRICE);
         require!(min_buy_amount <= max_buy_amount, ERROR_WRONG_MIN_MAX_AMOUNTS);
