@@ -66,6 +66,7 @@ pub trait TFNTestLaunchpadContract<ContractReader>:
             total_sold: BigUint::zero(),
             launched: false,
             status: Status::Pending,
+            user_bought: BigUint::zero(),
         };
         self.launchpads(launchpad.id).set(&launchpad);
         self.token_launchpad_id(&token).set(launchpad.id);
