@@ -127,9 +127,21 @@ getLaunchpad(id: u64) -> Launchpad
 <br/>
 
 ```rust
-getAllLaunchpads(user: OptionalValue<ManagedAddress>) -> ManagedVec<Launchpad>
+getAllLaunchpads(
+    start_idx: u64,
+    end_idx: u64,
+    address: ManagedAddress,
+    status: OptionalValue<Status>,
+) -> ManagedVec<Launchpad>
 ```
->Returns a list with all the launchpads. If 
+>Returns a list with all the launchpads. The `user_bought` field of each launchpad is populated with `address`'s participation amount in the respective launchpad. 
+>If `start_idx` and `end_idx` are non zero, only the launchpads in between are returned (useful for pagination). if `status` is specified, only the launchpads with that status are returned.
+<br/>
+
+```rust
+getLaunchpadsCount(status: OptionalValue<Status>) -> u64
+```
+>Returns the count of all launchpads. If `status` is specified, the value returned represents the count of all launchpads with that status (also useful for pagination).
 
 <br/>
 
