@@ -8,6 +8,7 @@
 # Description
 
 This is a child contract of Platform SC. A separate instance is deployed for each platform subscriber.\
+It is basically a capital raising platform for the students entrepreneurial ideas. Users whitelisted in the parent Platform SC can launch tokens for their project ideas, in order to raise funds for further development.
 <br/>
 <br/>
 <br/>
