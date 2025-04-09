@@ -185,14 +185,42 @@
             "mutability": "readonly",
             "inputs": [
                 {
-                    "name": "user",
-                    "type": "optional<Address>",
+                    "name": "start_idx",
+                    "type": "u64"
+                },
+                {
+                    "name": "end_idx",
+                    "type": "u64"
+                },
+                {
+                    "name": "address",
+                    "type": "Address"
+                },
+                {
+                    "name": "status",
+                    "type": "optional<Status>",
                     "multi_arg": true
                 }
             ],
             "outputs": [
                 {
                     "type": "List<Launchpad>"
+                }
+            ]
+        },
+        {
+            "name": "getLaunchpadsCount",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "status",
+                    "type": "optional<Status>",
+                    "multi_arg": true
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "u64"
                 }
             ]
         },
